@@ -27,6 +27,7 @@ interface RevealProps {
   delay?: number; // in milliseconds
   className?: string;
   as?: keyof React.JSX.IntrinsicElements;
+  style?: React.CSSProperties;
 }
 
 const variantClass: Record<Variant, string> = {
