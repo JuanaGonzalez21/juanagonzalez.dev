@@ -1,15 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-
-// ================================================================
-// Fuentes (cargadas y optimizadas por Next.js)
-// ================================================================
-// Cada fuente expone una CSS variable que luego usamos en globals.css:
-//   --font-geist     → titulares y texto de énfasis
-//   --font-inter     → cuerpo del texto
-//   --font-jetbrains → código, labels, monoespaciado
-// ================================================================
+import Providers from "./providers";
 
 const geist = Geist({
   variable: "--font-geist",
@@ -32,18 +24,14 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
-// ================================================================
-// Metadata (aparece en la pestaña del navegador, Google, redes)
-// ================================================================
 export const metadata: Metadata = {
-  title: "Juana González · Desarrolladora Frontend",
+  title: "Juana González · Frontend Developer",
   description:
-    "Juana González — Desarrolladora Frontend en Bogotá, Colombia. Convierto ideas dispersas en interfaces que se ven bien y van rápido.",
+    "Juana González — Frontend Developer based in Bogotá, Colombia. I turn scattered ideas into interfaces that look good and load fast.",
   metadataBase: new URL("https://juanagonzalez.dev"),
   openGraph: {
-    title: "Juana González · Desarrolladora Frontend",
-    description:
-      "Convierto ideas dispersas en interfaces que se ven bien y van rápido.",
+    title: "Juana González · Frontend Developer",
+    description: "I turn scattered ideas into interfaces that look good and load fast.",
     url: "https://juanagonzalez.dev",
     siteName: "juanagonzalez.dev",
     locale: "es_CO",
@@ -51,24 +39,45 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Juana González · Desarrolladora Frontend",
-    description:
-      "Convierto ideas dispersas en interfaces que se ven bien y van rápido.",
+    title: "Juana González · Frontend Developer",
+    description: "I turn scattered ideas into interfaces that look good and load fast.",
   },
 };
+
+/**
+ * Inline script that runs synchronously BEFORE React hydrates.
+ * Reads the persisted theme/lang preference from localStorage and sets
+ * the html attributes accordingly, preventing "flash of wrong theme".
+ */
+const noFlashScript = `
+(function(){
+  try {
+    var t = localStorage.getItem('theme');
+    document.documentElement.setAttribute('data-theme', (t === 'light' || t === 'dark') ? t : 'dark');
+    var l = localStorage.getItem('lang');
+    document.documentElement.setAttribute('lang', (l === 'en' || l === 'es') ? l : 'es');
+  } catch(e) {}
+})();
+`;
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-return (
-  <html
-    lang="es"
-    data-theme="dark"
-    className={`${geist.variable} ${inter.variable} ${jetbrains.variable}`}
-  >
-    <body>{children}</body>
-  </html>
-);
+  return (
+    <html
+      lang="es"
+      data-theme="dark"
+      className={`${geist.variable} ${inter.variable} ${jetbrains.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: noFlashScript }} />
+      </head>
+      <body suppressHydrationWarning>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
 }

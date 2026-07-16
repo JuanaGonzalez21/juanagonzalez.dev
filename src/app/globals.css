@@ -631,3 +631,227 @@ section { position: relative; }
   .pos-perf  { left: -10px; }
   .pos-stack { right: -8px; }
 }
+/* ============================================================
+   Additions v2 · Nav switches, hamburger fix, mobile hero,
+   CV attract, tagline on scroll
+   ------------------------------------------------------------
+   APPEND this block at the END of your existing globals.css.
+   Do NOT replace the whole file.
+   ============================================================ */
+
+/* -------------------------------------------
+   NAV: tagline that appears on scroll
+   ------------------------------------------- */
+.nav-tagline {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transform: translateY(-4px);
+  transition: opacity .35s ease, max-height .35s ease, transform .35s ease;
+  margin-top: 2px;
+  line-height: 1;
+}
+.nav.scrolled .nav-tagline {
+  opacity: 1;
+  max-height: 14px;
+  transform: translateY(0);
+}
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1;
+}
+
+/* -------------------------------------------
+   NAV: circular toggle buttons (lang + theme)
+   ------------------------------------------- */
+.nav-toggle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+  transition: border-color .25s, transform .25s, background .25s;
+  flex-shrink: 0;
+}
+.nav-toggle:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+.nav-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.nav-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+.nav-toggle .flag-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Theme icons: show sun in dark mode, moon in light mode */
+.nav-toggle .icon-sun,
+.nav-toggle .icon-moon {
+  transition: opacity .25s, transform .3s;
+}
+[data-theme="dark"] .nav-toggle .icon-moon { display: none; }
+[data-theme="light"] .nav-toggle .icon-sun { display: none; }
+
+/* -------------------------------------------
+   CV button: subtle attention pulse
+   ------------------------------------------- */
+@keyframes cvAttract {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(212, 255, 63, 0);
+    transform: translateY(0);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(212, 255, 63, 0.10),
+                0 0 24px rgba(212, 255, 63, 0.28);
+    transform: translateY(-1px);
+  }
+}
+.btn-attract {
+  animation: cvAttract 3.6s ease-in-out infinite;
+  animation-delay: 2.5s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-attract { animation: none; }
+}
+
+/* -------------------------------------------
+   MOBILE MENU: better spacing when open,
+   include lang/theme buttons inside if needed
+   ------------------------------------------- */
+.mobile-menu {
+  padding-top: 90px;
+}
+.mobile-menu-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 32px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .35s .32s, transform .35s .32s;
+}
+.mobile-menu.open .mobile-menu-actions {
+  opacity: 1;
+  transform: none;
+}
+
+/* -------------------------------------------
+   MOBILE HERO: reposition cards away from face
+   ------------------------------------------- */
+@media (max-width: 900px) {
+  .hero-stage {
+    height: 480px;
+    transform: none;
+    margin-inline: auto;
+    max-width: 440px;
+  }
+  /* Push the 4 cards to the 4 corners around the photo,
+     far from the center where the face lives */
+  .pos-status {
+    top: -8px;
+    right: -12px;
+    left: auto;
+  }
+  .pos-perf {
+    top: auto;
+    bottom: 22%;
+    left: -18px;
+  }
+  .pos-loc {
+    bottom: -12px;
+    left: 8%;
+    right: auto;
+  }
+  .pos-stack {
+    top: 18%;
+    right: -14px;
+    left: auto;
+  }
+  /* Compact cards so they don't dominate the photo */
+  .hcard {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  .hcard .hic {
+    width: 28px;
+    height: 28px;
+  }
+  .hcard .hic svg {
+    width: 15px;
+    height: 15px;
+  }
+  .hcard b {
+    font-size: 0.78rem;
+  }
+  .hcard small {
+    font-size: 0.65rem;
+  }
+  .hbar {
+    width: 62px;
+  }
+}
+@media (max-width: 520px) {
+  .hero-stage {
+    height: 420px;
+    max-width: 320px;
+  }
+  .pos-status { top: -6px; right: -6px; }
+  .pos-perf   { bottom: 26%; left: -12px; }
+  .pos-loc    { bottom: -8px; left: 12%; }
+  .pos-stack  { top: 22%; right: -8px; }
+  .hcard { padding: 6px 10px; }
+  .hcard .hic { width: 24px; height: 24px; }
+  .hcard .hic svg { width: 13px; height: 13px; }
+  .hcard b { font-size: 0.72rem; }
+  .hcard small { font-size: 0.6rem; }
+}
+
+/* -------------------------------------------
+   NAV: keep lang/theme buttons visible on mobile,
+   hide only the CV button and hero nav-links
+   ------------------------------------------- */
+@media (max-width: 900px) {
+  .nav-right { gap: 8px; }
+  .nav-right .btn-ghost { display: none; }
+  /* Toggle buttons stay visible on mobile */
+  .nav-toggle { display: grid; }
+}
+
+/* -------------------------------------------
+   FLOATING CARDS: ensure they keep floating on
+   mobile too (the phone-float already had this
+   but we reinforce here in case)
+   ------------------------------------------- */
+.hcard-float {
+  animation: hcardFloat var(--dur, 8s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes hcardFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(calc(var(--amp, 12px) * -1)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hcard-float { animation: none; }
+}
