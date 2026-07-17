@@ -106,7 +106,7 @@ export const dictionaries = {
     "timeline.4.title": "EtyaLab S.A.",
     "timeline.4.org": "Desarrolladora de Software y Web",
     "timeline.4.desc": "Desarrollo de aplicaciones informáticas en modalidad remota. Vinculación como desarrolladora tras completar exitosamente las prácticas empresariales en la misma empresa.",
-    "timeline.5.date": "Hasta 2022",
+    "timeline.5.date": "2019 - 2022",
     "timeline.5.title": "Universidad Cooperativa de Colombia",
     "timeline.5.org": "Tecnología en Desarrollo y Administración de Aplicaciones Informáticas",
     "timeline.5.desc": "Fundamentos de programación, matemáticas y bases de datos — donde el código y las mates por fin se encontraron.",

@@ -855,3 +855,60 @@ section { position: relative; }
 @media (prefers-reduced-motion: reduce) {
   .hcard-float { animation: none; }
 }
+
+/* ============================================================
+   Additions v3 · Menú móvil (hamburguesa) + fix scroll horizontal
+   ============================================================ */
+.mobile-menu a {
+  font-size: clamp(2rem, 8.5vw, 3.2rem);   /* antes: clamp(2.6rem, 11vw, 4.6rem) */
+  line-height: 1.15;
+  padding-block: 0.12em;                    /* respiro + mejor área de toque */
+  word-break: break-word;                   /* palabras largas nunca empujan el ancho */
+}
+
+/* 2 · Botón "Descargar CV": que se ajuste al contenido, no a toda la pantalla */
+.mobile-cv {
+  align-self: flex-start;   /* clave: deja de estirarse de lado a lado */
+  margin-top: 1.6rem;       /* antes: 2.2rem */
+  padding: 0.7em 1.4em;
+  font-size: 0.95rem;
+}
+
+/* 3 · El menú (position:fixed) recorta lo que se salga por dentro */
+.mobile-menu {
+  overflow-x: hidden;
+  overflow-y: auto;         /* por si el contenido queda más alto que la pantalla */
+}
+
+/* 4 · Red de seguridad general contra scroll horizontal.
+      overflow-x: clip NO rompe position: sticky (a diferencia de hidden),
+      así que tu .about-deco sigue funcionando. */
+html {
+  overflow-x: clip;
+}
+/* ============================================================
+   Additions v4 · Menú móvil más pequeño + CV estilo ghost (igual a laptop)
+   ============================================================ */
+.mobile-menu a {
+  font-size: clamp(1.5rem, 6.5vw, 2.4rem);   /* v3 era clamp(2rem, 8.5vw, 3.2rem) */
+  line-height: 1.2;
+}
+
+/* Botón CV: mismo look que el ghost del nav en laptop (contorno, sin relleno lima)
+   + tamaño btn-sm. Se resuelve solo en CSS, sin tocar page.tsx. */
+.mobile-cv {
+  align-self: flex-start;
+  margin-top: 1.6rem;
+  padding: 0.6em 1.05em;            /* = btn-sm */
+  font-size: 0.85rem;               /* = btn-sm */
+  background: transparent;          /* apaga el relleno de btn-primary */
+  color: var(--text);
+  border-color: var(--border);
+}
+.mobile-cv:hover {
+  background: transparent;
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  transform: translateY(-2px);
+  box-shadow: none;                 /* quita el glow de btn-primary:hover */
+}
