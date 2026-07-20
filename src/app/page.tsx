@@ -506,7 +506,7 @@ export default function Home() {
                 </svg>
                 <span className="c2-copy-txt">{copied ? t("contact.copied") : t("contact.copy")}</span>
               </button>
-              <a className="btn btn-primary" href="mailto:hola@juanagonzalez.dev">
+              <a className="btn btn-primary" href="mailto:juana.gonzalez.dev@gmail.com">
                 {t("contact.send")} <span className="arr">→</span>
               </a>
             </div>
