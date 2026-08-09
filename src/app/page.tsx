@@ -221,19 +221,6 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="hcard-pos pos-perf">
-              <div className="hcard-parallax">
-                <div className="hcard-float" style={{ "--amp": "16px", "--dur": "7s", "--delay": "0s" } as React.CSSProperties}>
-                  <div className="hcard-enter" style={{ "--enter-delay": ".2s" } as React.CSSProperties}>
-                    <div className="hcard" style={{ "--breathe-delay": "0s" } as React.CSSProperties}>
-                      <span className="hic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M3 13.5 7.5 9l3.5 3 4-5 5.5 6" /><path d="M3 20h18" /></svg></span>
-                      <span className="htxt"><b>{t("hero.card.perf.title")}</b><span className="hbar"><i></i></span></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <div className="hcard-pos pos-loc">
               <div className="hcard-parallax">
                 <div className="hcard-float" style={{ "--amp": "14px", "--dur": "8s", "--delay": ".7s" } as React.CSSProperties}>
@@ -364,7 +351,7 @@ export default function Home() {
           {/* 01 MoocAmbiental */}
           <article className="project">
             <Reveal className="project-media" variant="left">
-              <div className="ph shot"><span className="ph-tag">{t("projects.mediaAlt")} — MoocAmbiental</span></div>
+              <img className="shot" src="/projects/moocambiental.png" alt={`${t("projects.mediaAlt")} — MoocAmbiental`} loading="lazy" />
             </Reveal>
             <Reveal className="project-body" variant="right">
               <span className="project-num">01</span>
@@ -392,7 +379,7 @@ export default function Home() {
           {/* 02 BMI Calculator */}
           <article className="project flip">
             <Reveal className="project-media" variant="right">
-              <div className="ph shot"><span className="ph-tag">{t("projects.mediaAlt")} — BMI Calculator</span></div>
+              <img className="shot" src="/projects/bmi-calculator.png" alt={`${t("projects.mediaAlt")} — BMI Calculator`} loading="lazy" />
             </Reveal>
             <Reveal className="project-body" variant="left">
               <span className="project-num">02</span>
@@ -416,34 +403,30 @@ export default function Home() {
             </Reveal>
           </article>
 
-          {/* 03 AluraGeek */}
-          <article className="project">
-            <Reveal className="project-media" variant="left">
-              <div className="ph shot"><span className="ph-tag">{t("projects.mediaAlt")} — AluraGeek</span></div>
-            </Reveal>
-            <Reveal className="project-body" variant="right">
-              <span className="project-num">03</span>
-              <h3>
-                AluraGeek{" "}
-                <span className="badge" style={{ verticalAlign: "middle", fontSize: "0.6em" }}>
-                  {t("projects.inProgress")}
-                </span>
-              </h3>
-              <p className="desc">{t("projects.3.desc")}</p>
-              <p className="role-line"><span className="lbl">{t("projects.role")}</span> {t("projects.3.role")}</p>
-              <div className="stack">
-                <span className="badge">React</span>
-                <span className="badge">React Router</span>
-                <span className="badge">Axios</span>
-                <span className="badge">Bootstrap</span>
-              </div>
-              <div className="links">
-                <a className="btn btn-ghost btn-sm" href="https://github.com/JuanaGonzalez21/Challenge_AluraGeek" target="_blank" rel="noopener noreferrer">
-                  {t("projects.viewCode")} <span className="arr">→</span>
-                </a>
-              </div>
-            </Reveal>
-          </article>
+{/* 03 Mily Glasses */}
+<article className="project">
+  <Reveal className="project-media" variant="left">
+    <img className="shot" src="/projects/milyglasses.png" alt={`${t("projects.mediaAlt")} — Mily Glasses`} loading="lazy" />
+  </Reveal>
+  <Reveal className="project-body" variant="right">
+    <span className="project-num">03</span>
+    <h3>Mily Glasses Vision</h3>
+    <p className="desc">{t("projects.3.desc")}</p>
+    <p className="role-line"><span className="lbl">{t("projects.role")}</span> {t("projects.3.role")}</p>
+    <div className="stack">
+      <span className="badge">WordPress</span>
+      <span className="badge">WooCommerce</span>
+      <span className="badge">Blocksy</span>
+      <span className="badge">Bold</span>
+      <span className="badge">CSS</span>
+    </div>
+    <div className="links">
+      <a className="btn btn-primary btn-sm" href="https://milyglasses.com" target="_blank" rel="noopener noreferrer">
+        {t("projects.viewDemo")} <span className="arr">→</span>
+      </a>
+    </div>
+  </Reveal>
+</article>
         </div>
       </section>
 

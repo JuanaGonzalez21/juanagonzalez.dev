@@ -4,7 +4,6 @@
 // Structure: dict[lang][section][key]
 // Access via t('section.key') from useLang() hook.
 // ================================================================
-
 export const dictionaries = {
   es: {
     // NAV
@@ -81,8 +80,8 @@ export const dictionaries = {
     "projects.1.role": "Diseño + desarrollo full-stack",
     "projects.2.desc": "Calculadora de índice de masa corporal con feedback claro e inmediato. Un reto de Frontend Mentor donde practiqué implementación pixel-perfect a partir de un diseño en Figma.",
     "projects.2.role": "Desarrollo frontend",
-    "projects.3.desc": "Tienda e-commerce de productos geek con catálogo dinámico y carrito. Proyecto del programa Oracle Next Education / Alura LATAM — en proceso, pronto con demo en vivo.",
-    "projects.3.role": "Desarrollo frontend",
+    "projects.3.desc": "E-commerce de gafas para una marca bogotana. Tienda online con catálogo de productos, pasarela de pagos Bold y diseño editorial con identidad visual propia.",
+    "projects.3.role": "Diseño + desarrollo WordPress/WooCommerce",
     "projects.mediaAlt": "captura",
 
     // TRAYECTORIA
@@ -94,10 +93,10 @@ export const dictionaries = {
     "timeline.1.title": "Universidad Cooperativa de Colombia",
     "timeline.1.org": "Ingeniería de Sistemas",
     "timeline.1.desc": "Profundización en arquitectura de software, algoritmos y desarrollo — dando el siguiente paso sobre la base tecnológica. Graduada en junio de 2026.",
-    "timeline.2.date": "Ene 2024 — Dic 2024",
-    "timeline.2.title": "Octopus CMS",
-    "timeline.2.org": "Desarrolladora Web",
-    "timeline.2.desc": "Desarrollo frontend con React.js y JavaScript: interfaces modernas y responsive, integración de APIs REST, y optimización de rendimiento en aplicaciones web existentes.",
+    "timeline.2.date": "Ene 2024 — Jul 2024",
+  "timeline.2.title": "Octopus CMS",
+  "timeline.2.org": "Apoyo en Desarrollo Web",
+  "timeline.2.desc": "Integración al equipo de desarrollo trabajando con React.js y JavaScript en una aplicación en producción. Apoyo en ajustes de interfaz y tareas puntuales de frontend.",
     "timeline.3.date": "Sep 2022 — Mar 2023",
     "timeline.3.title": "Caracol Radio",
     "timeline.3.org": "Auxiliar de Sistemas",
@@ -202,7 +201,7 @@ export const dictionaries = {
     "projects.1.role": "Design + full-stack development",
     "projects.2.desc": "Body mass index calculator with clear, immediate feedback. A Frontend Mentor challenge where I practiced pixel-perfect implementation from a Figma design.",
     "projects.2.role": "Frontend development",
-    "projects.3.desc": "Geek products e-commerce store with dynamic catalog and cart. Project from the Oracle Next Education / Alura LATAM program — in progress, live demo coming soon.",
+    "projects.3.desc": "Eyewear e-commerce for a Bogotá-based brand. Online store with product catalog, Bold payment gateway and editorial design with its own visual identity.",
     "projects.3.role": "Frontend development",
     "projects.mediaAlt": "screenshot",
 
@@ -215,10 +214,10 @@ export const dictionaries = {
     "timeline.1.title": "Universidad Cooperativa de Colombia",
     "timeline.1.org": "Systems Engineering",
     "timeline.1.desc": "Deepening in software architecture, algorithms and development — taking the next step on top of the technological foundation. Graduated in June 2026.",
-    "timeline.2.date": "Jan 2024 — Dec 2024",
-    "timeline.2.title": "Octopus CMS",
-    "timeline.2.org": "Web Developer",
-    "timeline.2.desc": "Frontend development with React.js and JavaScript: modern responsive interfaces, REST API integration, and performance optimization on existing web applications.",
+    "timeline.2.date": "Jan 2024 — Jul 2024",
+"timeline.2.title": "Octopus CMS",
+"timeline.2.org": "Web Development Support",
+"timeline.2.desc": "Joined the development team working with React.js and JavaScript on a production application. Support in interface adjustments and specific frontend tasks.",
     "timeline.3.date": "Sep 2022 — Mar 2023",
     "timeline.3.title": "Caracol Radio",
     "timeline.3.org": "Systems Support",
