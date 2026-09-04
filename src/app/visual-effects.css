@@ -236,27 +236,63 @@ section[id] { scroll-margin-top: 80px; }
 }
 
 /* ============================================================
-   RETRATO — linterna: revela la versión oscura bajo el cursor
+   RETRATO — imagen a color sobre toda la tarjeta
    ============================================================ */
-.photo-frame { cursor: crosshair; --mx: 50%; --my: 50%; --r: 0px; }
+/* White base and color reveal share the same uncropped artwork canvas. */
+.photo-frame { cursor: crosshair; --mx: 50%; --my: 50%; --r: 0px; background: #fff !important; }
+.pf-art {
+  position: absolute;
+  width: calc(100% - 36px);
+  aspect-ratio: 1;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.photo-frame .pf-art img {
+  width: 100%;
+  height: auto;
+  padding: 0;
+  object-fit: contain;
+}
+.photo-frame .pf-hover .pf-art img {
+  /* Register the color artwork against the white version's eyes and glasses.
+     Percentages preserve the alignment at every responsive portrait size. */
+  transform-origin: top left;
+  transform: translate(.2%, .76%) scale(1.016, .986);
+}
 .photo-frame .pf-hover {
-  position: absolute; inset: 0; opacity: 1;
-  /* misma geometría que la base: alineación exacta */
-  -webkit-mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my), #000 55%, rgba(0,0,0,.35) 78%, transparent 100%);
-  mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my), #000 55%, rgba(0,0,0,.35) 78%, transparent 100%);
-  transition: -webkit-mask-image .18s ease, mask-image .18s ease;
+  position: absolute;
+  inset: 0;
+  background: #403c38;
+  -webkit-mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my), #000 78%, transparent 100%), var(--ambient-mask, linear-gradient(transparent, transparent));
+  mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my), #000 78%, transparent 100%), var(--ambient-mask, linear-gradient(transparent, transparent));
   pointer-events: none;
 }
-/* halo lima que acompaña la mancha */
-.photo-frame::after {
-  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 3;
-  background: radial-gradient(circle calc(var(--r) + 12px) at var(--mx) var(--my),
-    transparent 62%,
-    color-mix(in srgb, var(--accent) 30%, transparent) 82%,
-    transparent 100%);
-  opacity: 0; transition: opacity .25s ease;
+/* Floating reveal lenses are confined to the home scene by HeroBubbles. */
+.hero-bubbles {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  overflow: clip;
+  pointer-events: none;
+  opacity: 0;
+  contain: strict;
 }
-.photo-frame:hover::after { opacity: 1; }
+.hero-bubble {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(180, 255, 57, .28);
+  background: radial-gradient(circle at 28% 24%, rgba(255,255,255,.48), rgba(255,255,255,.06) 12%, transparent 42%);
+  box-shadow: inset -2px -2px 5px rgba(180,255,57,.1), inset 1px 1px 3px rgba(255,255,255,.24);
+}
+@media (min-width: 901px) {
+  .hero-bubbles { left: var(--rail, 78px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-bubbles { display: none; }
+}
 
 /* ============================================================
    TÍTULO — linterna que revela un patrón moiré lima en movimiento
@@ -281,8 +317,8 @@ section[id] { scroll-margin-top: 80px; }
       rgba(8,12,4,.55) 6deg 12deg);
   background-size: 220px 220px, 180px 180px, 300px 300px;
   background-blend-mode: screen, screen, overlay;
-  -webkit-mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my), #000 52%, rgba(0,0,0,.4) 78%, transparent 100%);
-  mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my), #000 52%, rgba(0,0,0,.4) 78%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my), #000 52%, rgba(0,0,0,.4) 78%, transparent 100%), var(--ambient-mask, linear-gradient(transparent, transparent));
+  mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my), #000 52%, rgba(0,0,0,.4) 78%, transparent 100%), var(--ambient-mask, linear-gradient(transparent, transparent));
   animation: moire 7s linear infinite;
   will-change: background-position;
 }

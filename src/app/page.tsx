@@ -1,10 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Reveal from "@/components/Reveal";
 import Aurora from "@/components/Aurora";
+import HeroBubbles from "@/components/HeroBubbles";
 import Torch from "@/components/Torch";
 import NavIcon from "@/components/NavIcon";
+import SceneFlow from "@/components/SceneFlow";
+import ScrollScene from "@/components/ScrollScene";
 import { useLang } from "@/i18n/LanguageProvider";
 import { useTheme } from "@/theme/ThemeProvider";
 
@@ -38,6 +42,7 @@ export default function Home() {
     const sections = links.map((link) => document.querySelector<HTMLElement>(link.hash));
     let frame = 0;
     const update = () => {
+      if (document.querySelector(".scene-flow[data-enhanced]")) return;
       const marker = window.innerHeight * 0.35;
       let active = "#inicio";
       sections.forEach((section) => {
@@ -133,6 +138,7 @@ export default function Home() {
   return (
     <>
       <Aurora />
+      <HeroBubbles />
       <div className="top-controls">
         <div className="lang-switch" role="group" aria-label={t("nav.langToggle")}>
           {(["es", "en"] as const).map((language) => (
@@ -199,7 +205,8 @@ export default function Home() {
       </div>
 
       {/* ============================================================ 1 · HERO ============================================================ */}
-      <section className="hero" id="inicio" ref={heroRef}>
+      <SceneFlow>
+      <ScrollScene className="hero" id="inicio" ref={heroRef}>
         <div className="hero-grid-bg" aria-hidden="true"></div>
         <div className="wrap hero-layout">
           <div className="hero-inner hero-stagger">
@@ -231,10 +238,14 @@ export default function Home() {
               <div className="phone-float">
                 <div className="phone-enter">
                   <Torch as="figure" className="photo-frame" radius={92}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img className="pf-base" src="/juana-avatar.png" alt={t("hero.imgAlt")} width={330} height={440} fetchPriority="high" />
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img className="pf-hover" src="/juana-avatar-dark-aligned.png" alt="" aria-hidden="true" width={330} height={440} />
+                    <span className="pf-art">
+                      <Image className="pf-base" src="/juana-avatar-white.png" alt={t("hero.imgAlt")} width={1254} height={1254} sizes="(max-width: 520px) 244px, 294px" loading="eager" fetchPriority="high" />
+                    </span>
+                    <span className="pf-hover" aria-hidden="true">
+                      <span className="pf-art">
+                        <Image src="/juana-avatar-hover.png" alt="" width={1222} height={1287} sizes="(max-width: 520px) 244px, 294px" />
+                      </span>
+                    </span>
                     <span className="pf-corner tl"></span>
                     <span className="pf-corner br"></span>
                   </Torch>
@@ -287,10 +298,10 @@ export default function Home() {
           <svg className="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6" /></svg>
           {t("hero.scroll")}
         </a>
-      </section>
+      </ScrollScene>
 
       {/* ============================================================ 2 · SOBRE MÍ ============================================================ */}
-      <section className="section-pad" id="sobre-mi">
+      <ScrollScene className="section-pad" id="sobre-mi">
         <div className="wrap">
           <Reveal className="section-head">
             <span className="section-kicker">{t("about.kicker")}</span>
@@ -343,10 +354,10 @@ export default function Home() {
             </Reveal>
           </div>
         </div>
-      </section>
+      </ScrollScene>
 
       {/* ============================================================ 3 · LO QUE HAGO ============================================================ */}
-      <section className="section-pad tinted" id="lo-que-hago">
+      <ScrollScene className="section-pad tinted" id="lo-que-hago">
         <div className="wrap">
           <Reveal className="section-head">
             <span className="section-kicker">{t("do.kicker")}</span>
@@ -372,10 +383,10 @@ export default function Home() {
             })}
           </div>
         </div>
-      </section>
+      </ScrollScene>
 
       {/* ============================================================ 4 · PROYECTOS ============================================================ */}
-      <section className="section-pad" id="proyectos">
+      <ScrollScene className="section-pad" id="proyectos">
         <div className="wrap">
           <Reveal className="section-head">
             <span className="section-kicker">{t("projects.kicker")}</span>
@@ -462,10 +473,10 @@ export default function Home() {
   </Reveal>
 </article>
         </div>
-      </section>
+      </ScrollScene>
 
       {/* ============================================================ 5 · TRAYECTORIA ============================================================ */}
-      <section className="section-pad tinted" id="experiencia">
+      <ScrollScene className="section-pad tinted" id="experiencia">
         <div className="wrap">
           <Reveal className="section-head" style={{ alignItems: "center", textAlign: "center" }}>
             <span className="section-kicker" style={{ alignSelf: "center" }}>{t("timeline.kicker")}</span>
@@ -492,10 +503,10 @@ export default function Home() {
             })}
           </div>
         </div>
-      </section>
+      </ScrollScene>
 
       {/* ============================================================ 6 · CONTACTO ============================================================ */}
-      <section className="section-pad contact2" id="contacto">
+      <ScrollScene className="section-pad contact2" id="contacto">
         <div className="wrap">
           <Reveal className="c2-head">
             <span className="section-kicker" style={{ justifyContent: "center" }}>{t("contact.kicker")}</span>
@@ -565,7 +576,9 @@ export default function Home() {
             </Reveal>
           </div>
         </div>
-      </section>
+      </ScrollScene>
+
+      </SceneFlow>
 
       {/* ============================================================ FOOTER ============================================================ */}
       <footer className="footer">
