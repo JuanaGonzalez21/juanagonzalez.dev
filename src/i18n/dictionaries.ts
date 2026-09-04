@@ -34,7 +34,7 @@ export const dictionaries = {
     "hero.card.loc.sub": "GMT-5",
     "hero.card.stack.title": "Stack",
     "hero.card.stack.sub": "React · Next.js · TS",
-    "hero.imgAlt": "Juana González con toga y birrete de grado",
+    "hero.imgAlt": "Ilustración pixel art de Juana González",
 
     // ABOUT
     "about.kicker": "Sobre mí",
@@ -155,7 +155,7 @@ export const dictionaries = {
     "hero.card.loc.sub": "GMT-5",
     "hero.card.stack.title": "Stack",
     "hero.card.stack.sub": "React · Next.js · TS",
-    "hero.imgAlt": "Juana González wearing graduation gown and cap",
+    "hero.imgAlt": "Pixel art illustration of Juana González",
 
     // ABOUT
     "about.kicker": "About me",

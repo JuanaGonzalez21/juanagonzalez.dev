@@ -1,0 +1,367 @@
+/* Visual treatment adapted from the supplied portfolio reference. */
+body { background: transparent; }
+section, .footer { position: relative; z-index: 1; }
+section[id] { scroll-margin-top: 80px; }
+.logo { flex-direction: row; }
+.photo-frame {
+  background: linear-gradient(160deg, #fff 0%, #f1f2ec 100%) !important;
+  backdrop-filter: none !important;
+}
+.photo-frame img {
+  width: 100%; height: 100%; object-fit: contain; object-position: center;
+  padding: 18px;
+}
+
+/* Eclipse: one painted gradient layer; only its transform is animated. */
+:root { --au-core: 214, 245, 170; --au-1: 122, 190, 40; --au-2: 30, 96, 48; }
+
+.aurora {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+  background: #000;
+  contain: strict;
+}
+.eclipse-orbit {
+  position: absolute;
+  width: clamp(620px, 60vw, 1080px);
+  aspect-ratio: 1;
+  left: 59%;
+  top: 46%;
+  margin: 0;
+  border-radius: 50%;
+  /* Soft edges are painted into the gradient, without a blur filter. */
+  background: radial-gradient(circle closest-side,
+    transparent 80%,
+    rgba(var(--au-1), .015) 86%,
+    rgba(var(--au-1), .06) 91%,
+    rgba(var(--au-1), .19) 95%,
+    rgba(var(--au-core), .28) 97%,
+    rgba(var(--au-1), .22) 98.5%,
+    transparent 100%);
+  /* The brighter crescent travels around the ring as the layer rotates. */
+  mask-image: linear-gradient(155deg, #000 10%, #000 35%, rgba(0,0,0,.2) 67%, transparent 88%);
+  transform: translate3d(-50%, -50%, 0) rotate(0deg);
+  animation: eclipseOrbit 18s linear infinite;
+}
+@keyframes eclipseOrbit {
+  0% { transform: translate3d(-50%, -50%, 0) rotate(0deg) scale(1); }
+  25% { transform: translate3d(-46%, -53%, 0) rotate(90deg) scale(1.04); }
+  50% { transform: translate3d(-50%, -56%, 0) rotate(180deg) scale(1); }
+  75% { transform: translate3d(-54%, -53%, 0) rotate(270deg) scale(.97); }
+  100% { transform: translate3d(-50%, -50%, 0) rotate(360deg) scale(1); }
+}
+[data-theme="light"] .aurora { background: var(--bg); }
+[data-theme="light"] .eclipse-orbit { opacity: .45; }
+@media (max-width: 900px) {
+  .eclipse-orbit { width: min(760px, 115vw); left: 58%; top: 48%; }
+}
+@media (max-width: 520px) {
+  .eclipse-orbit { width: 125vw; left: 60%; top: 54%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .eclipse-orbit { animation: none; }
+}
+
+/* secciones antes opacas -> dejan pasar la luz */
+.section-pad.tinted {
+  background: color-mix(in srgb, var(--bg-2) 22%, transparent);
+  border-block: 1px solid var(--border);
+}
+
+/* ---- superficies de vidrio: la luz se filtra por detrás ---- */
+/* vidrio: el haz entra en la tarjeta y continúa fuera */
+.hcard, .do-card, .tl-card, .c2-social, .c2-mailcard, .stack-card, .project-media, .photo-frame {
+  background-color: color-mix(in srgb, var(--surface) 68%, transparent) !important;
+  /* Avoid filtering an animated background through every card. */
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-color: color-mix(in srgb, #ffffff 12%, var(--border)) !important;
+}
+.modal { backdrop-filter: blur(20px) saturate(160%); -webkit-backdrop-filter: blur(20px) saturate(160%); }
+.modal { background-color: color-mix(in srgb, var(--surface) 82%, transparent) !important; }
+.c2-mailcard {
+  background-image: radial-gradient(120% 160% at 0% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 55%) !important;
+}
+.stack-card {
+  background-image: linear-gradient(150deg, color-mix(in srgb, var(--surface) 40%, transparent), transparent) !important;
+}
+.stack-tile, .badge, .ph-pill { background-color: color-mix(in srgb, var(--surface-2) 38%, transparent); }
+.nav.scrolled { background: color-mix(in srgb, var(--bg) 58%, transparent); }
+
+.footer { background: color-mix(in srgb, var(--bg) 30%, transparent); backdrop-filter: blur(14px); }
+.hero-grid-bg { display: none; }
+
+
+/* retrato fundido: sus bordes negros se disuelven en el haz */
+.photo-frame {
+  border-color: color-mix(in srgb, #ffffff 14%, var(--border)) !important;
+  box-shadow: 0 40px 90px -34px rgba(0,0,0,.85), 0 0 60px -12px rgba(var(--au-1), .28);
+}
+
+
+/* ============================================================
+   NAV LATERAL IZQUIERDO — contraída con iconos, expande al hover
+   ============================================================ */
+.logo-mark { display: none; }
+.nav-ic { display: none; }
+.nav-ic svg { width: 20px; height: 20px; display: block; }
+
+@media (min-width: 901px) {
+  :root { --rail: 78px; --rail-open: 236px; }
+  body { padding-left: var(--rail); }
+  .aurora { left: var(--rail); }
+
+  .nav {
+    inset: 0 auto 0 0;
+    width: var(--rail);
+    height: 100vh;
+    border-bottom: none;
+    border-right: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    backdrop-filter: saturate(140%) blur(14px);
+    -webkit-backdrop-filter: saturate(140%) blur(14px);
+    overflow: visible;
+    transition: width .32s cubic-bezier(.2,.7,.3,1), background .3s;
+    z-index: 60;
+  }
+  .nav:hover, .nav:focus-within { width: var(--rail-open); }
+  .nav.scrolled { background: color-mix(in srgb, var(--bg) 88%, transparent); }
+
+  .nav-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 40px;
+    height: 100%;
+    width: var(--rail);
+    padding: 30px 19px;
+    transition: width .32s cubic-bezier(.2,.7,.3,1);
+  }
+  .nav:hover .nav-inner, .nav:focus-within .nav-inner { width: var(--rail-open); }
+  .nav-links { overflow: hidden; }
+
+  /* logo: marca corta contraído, completo al expandir */
+  .logo { display: flex; align-items: center; height: 40px; padding-left: 10px; font-size: 1.42rem; }
+  .logo-mark { display: block; }
+  .logo-full { display: block; position: absolute; left: 30px; opacity: 0; transition: opacity .22s; white-space: nowrap; }
+  .nav:hover .logo-mark, .nav:focus-within .logo-mark { opacity: 0; }
+  .nav:hover .logo-full, .nav:focus-within .logo-full { opacity: 1; transition-delay: .08s; }
+
+  .nav-links { flex-direction: column; align-items: stretch; gap: 4px; width: 100%; }
+  .nav-link {
+    display: flex; align-items: center; gap: 14px;
+    padding: 11px 10px; border-radius: 11px; font-size: 0.97rem;
+    white-space: nowrap;
+  }
+  .nav-ic { display: grid; place-items: center; width: 20px; flex: none; }
+  .nav-txt { opacity: 0; transform: translateX(-4px); transition: opacity .2s, transform .24s; }
+  .nav:hover .nav-txt, .nav:focus-within .nav-txt { opacity: 1; transform: none; transition-delay: .06s; }
+
+  /* indicador de sección: barra lateral lima */
+  .nav-link::after {
+    left: 0; right: auto; top: 50%; bottom: auto;
+    width: 3px; height: 0; transform: none; border-radius: 3px;
+    transition: height .28s cubic-bezier(.2,.7,.3,1), top .28s cubic-bezier(.2,.7,.3,1);
+  }
+  .nav-link.active { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+  .nav-link.active::after { height: 20px; top: calc(50% - 10px); }
+
+  /* CV: botón lima que resalta, circular contraído */
+  .nav-right { margin-top: auto; flex-direction: column; align-items: flex-start; width: 100%; gap: 12px; }
+  /* contraído: cuadrado lima que cabe entero en el rail; expandido: pill completa */
+  .nav-cv {
+    display: flex; align-items: center; gap: 10px;
+    justify-content: flex-start;
+    width: 142px; height: 30px; padding: 0 9px;
+    border-radius: 9px; overflow: hidden;
+    background: var(--accent) !important;
+    color: var(--on-accent) !important;
+    border-color: transparent !important;
+    font-weight: 700;
+    box-shadow: 0 12px 30px -10px color-mix(in srgb, var(--accent) 85%, transparent);
+    transition: width .32s cubic-bezier(.2,.7,.3,1), background .25s, transform .25s, box-shadow .25s;
+  }
+
+  .nav-cv:hover { background: var(--accent-hover) !important; transform: translateY(-2px); }
+  .nav-cv .nav-ic { width: 15px; flex: none; }
+  .nav-cv .nav-ic svg { width: 15px; height: 15px; }
+  .nav-cv .nav-txt { font-size: 0.74rem; opacity: 1; transform: none; }
+
+  .hero { padding-top: 0; }
+}
+
+/* ============================================================
+   CONTROLES SUPERIORES DERECHA — tema + idioma
+   ============================================================ */
+.top-controls {
+  position: fixed; top: 20px; right: 24px; z-index: 70;
+  display: flex; align-items: center; gap: 10px;
+}
+.lang-switch {
+  display: flex; align-items: center; gap: 2px; padding: 3px;
+  border-radius: 999px; border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 66%, transparent);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+}
+.lang-btn {
+  font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: .06em;
+  padding: 6px 11px; border-radius: 999px; border: none; cursor: pointer;
+  background: transparent; color: var(--muted);
+  transition: color .22s, background .22s;
+}
+.lang-btn:hover { color: var(--text); }
+.lang-btn.active { background: var(--accent); color: var(--on-accent); font-weight: 700; }
+
+.theme-btn {
+  width: 38px; height: 38px; display: grid; place-items: center; cursor: pointer;
+  border-radius: 50%; border: 1px solid var(--border); color: var(--text);
+  background: color-mix(in srgb, var(--bg) 66%, transparent);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  transition: color .22s, border-color .22s, transform .22s;
+}
+.theme-btn:hover { color: var(--accent-ink); border-color: var(--accent); transform: rotate(18deg); }
+.theme-btn svg { width: 18px; height: 18px; }
+.theme-btn .ic-moon { display: none; }
+[data-theme="light"] .theme-btn .ic-sun { display: none; }
+[data-theme="light"] .theme-btn .ic-moon { display: block; }
+
+@media (max-width: 900px) {
+  .top-controls { top: 14px; right: 74px; }
+  .theme-btn { width: 34px; height: 34px; }
+}
+
+/* ============================================================
+   RETRATO — imagen a color sobre toda la tarjeta
+   ============================================================ */
+/* White base and color reveal share the same uncropped artwork canvas. */
+.photo-frame { cursor: crosshair; --mx: 50%; --my: 50%; --r: 0px; background: #fff !important; }
+.pf-art {
+  position: absolute;
+  width: calc(100% - 36px);
+  aspect-ratio: 1;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.photo-frame .pf-art img {
+  width: 100%;
+  height: auto;
+  padding: 0;
+  object-fit: contain;
+}
+.photo-frame .pf-hover .pf-art img {
+  /* Register the color artwork against the white version's eyes and glasses.
+     Percentages preserve the alignment at every responsive portrait size. */
+  transform-origin: top left;
+  transform: translate(.2%, .76%) scale(1.016, .986);
+}
+.photo-frame .pf-hover {
+  position: absolute;
+  inset: 0;
+  background: #403c38;
+  -webkit-mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my), #000 78%, transparent 100%), var(--ambient-mask, linear-gradient(transparent, transparent));
+  mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my), #000 78%, transparent 100%), var(--ambient-mask, linear-gradient(transparent, transparent));
+  pointer-events: none;
+}
+/* Floating reveal lenses are confined to the home scene by HeroBubbles. */
+.hero-bubbles {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  overflow: clip;
+  pointer-events: none;
+  opacity: 0;
+  contain: strict;
+}
+.hero-bubble {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(180, 255, 57, .28);
+  background: radial-gradient(circle at 28% 24%, rgba(255,255,255,.48), rgba(255,255,255,.06) 12%, transparent 42%);
+  box-shadow: inset -2px -2px 5px rgba(180,255,57,.1), inset 1px 1px 3px rgba(255,255,255,.24);
+}
+@media (min-width: 901px) {
+  .hero-bubbles { left: var(--rail, 78px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-bubbles { display: none; }
+}
+
+/* ============================================================
+   TÍTULO — linterna que revela un patrón moiré lima en movimiento
+   ============================================================ */
+.h1-torch { position: relative; --mx: 50%; --my: 50%; --r: 0px; cursor: crosshair; }
+.h1-fx {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  font: inherit; letter-spacing: inherit; line-height: inherit;
+  color: transparent;
+  -webkit-background-clip: text; background-clip: text;
+  background-color: #0b0f06;
+  background-image:
+    repeating-radial-gradient(circle at 28% 34%,
+      rgba(var(--au-1), .95) 0 3px,
+      rgba(10,14,6,.95) 3px 8px),
+    repeating-radial-gradient(circle at 74% 68%,
+      rgba(var(--au-core), .9) 0 2px,
+      rgba(12,20,6,.9) 2px 7px),
+    repeating-conic-gradient(from 0deg at 50% 50%,
+      rgba(var(--au-1), .55) 0deg 6deg,
+      rgba(8,12,4,.55) 6deg 12deg);
+  background-size: 220px 220px, 180px 180px, 300px 300px;
+  background-blend-mode: screen, screen, overlay;
+  -webkit-mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my), #000 52%, rgba(0,0,0,.4) 78%, transparent 100%), var(--ambient-mask, linear-gradient(transparent, transparent));
+  mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my), #000 52%, rgba(0,0,0,.4) 78%, transparent 100%), var(--ambient-mask, linear-gradient(transparent, transparent));
+  animation: moire 7s linear infinite;
+  will-change: background-position;
+}
+@keyframes moire {
+  0%   { background-position: 0 0, 0 0, 0 0; }
+  50%  { background-position: 90px -60px, -70px 50px, 150px 150px; }
+  100% { background-position: 0 0, 0 0, 0 0; }
+}
+@media (prefers-reduced-motion: reduce) { .h1-fx { animation: none; } }
+
+/* Integrate the rail and effects with the existing responsive layout. */
+.top-controls .nav-toggle {
+  background: color-mix(in srgb, var(--bg) 66%, transparent);
+  backdrop-filter: blur(12px) saturate(150%);
+}
+:where(a, button):focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 4px; }
+@media (min-width: 901px) {
+  section[id] { scroll-margin-top: 24px; }
+  .nav-cv { width: 40px; height: 40px; padding: 0 10px; gap: 12px; }
+  .nav-cv .nav-ic { width: 18px; }
+  .nav-cv .nav-txt { opacity: 0; }
+  .nav:hover .nav-cv, .nav:focus-within .nav-cv { width: 198px; }
+  .nav:hover .nav-cv .nav-txt, .nav:focus-within .nav-cv .nav-txt { opacity: 1; }
+}
+@media (max-width: 900px) {
+  .hero { padding-top: 112px; padding-bottom: 70px; }
+  .hero-stage { width: 100%; }
+  .photo-frame { width: min(330px, 100%); }
+  .top-controls { right: calc(var(--gutter) + 54px); top: 16px; gap: 6px; }
+  .top-controls .nav-toggle { width: 34px; height: 34px; }
+  .lang-btn { padding: 6px 9px; }
+  .nav { background: color-mix(in srgb, var(--bg) 78%, transparent); backdrop-filter: blur(14px); }
+  .logo-full { display: block; }
+}
+@media (max-width: 520px) {
+  .photo-frame { width: min(280px, calc(100vw - 64px)); height: 370px; }
+  .hero .eyebrow { font-size: 0.65rem; letter-spacing: 0.08em; }
+  .hero-layout h1 { font-size: clamp(3rem, 13vw, 4.3rem); }
+  .hero-cta { gap: 10px; }
+  .hero-cta .btn { font-size: 0.85rem; padding-inline: 1em; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .phone-float, .hcard-float, .hcard, .dot { animation: none; }
+  .phone-enter, .hcard-enter { opacity: 1; transform: none; transition: none; }
+  .nav, .nav-inner, .nav-txt, .nav-cv { transition: none; }
+}

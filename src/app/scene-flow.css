@@ -1,0 +1,53 @@
+/* Readable document layout remains the default without JS or with reduced motion. */
+.scene-panel, .scene-content { display: contents; }
+.scene-flow .section-pad.tinted { background: transparent; border: 0; }
+.scene-flow[data-enhanced] > .scroll-scene {
+  height: var(--scene-height, 120svh);
+  min-height: 0;
+  padding: 0;
+  display: block;
+  z-index: auto;
+  scroll-margin-top: 0;
+}
+.scene-flow[data-enhanced] .scene-panel {
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 100dvh;
+  overflow: clip;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 2;
+}
+.scene-flow[data-enhanced] .scene-content {
+  display: block;
+  position: relative;
+  min-height: 100dvh;
+  padding-block: clamp(90px, 12vh, 150px);
+}
+.scene-flow[data-enhanced] .hero .scene-content {
+  display: flex;
+  align-items: center;
+  padding-block: 80px;
+}
+.scene-flow[data-enhanced] .about-deco { position: relative; top: auto; }
+.scene-flow[data-enhanced] :is(.reveal, .reveal-l, .reveal-r),
+.scene-flow[data-enhanced] .hero-stagger > * {
+  opacity: 1;
+  transform: none;
+  transition: none;
+  will-change: auto;
+}
+.scene-flow + .footer { position: relative; z-index: 3; }
+@media (min-width: 901px) {
+  .scene-flow[data-enhanced] .scene-panel { left: var(--rail, 78px); }
+}
+@media (max-width: 900px) {
+  .scene-flow[data-enhanced] .hero .scene-content { padding-block: 112px 70px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scene-flow[data-enhanced] > .scroll-scene { height: auto; }
+  .scene-flow[data-enhanced] .scene-panel { position: static; height: auto; visibility: visible; }
+}
