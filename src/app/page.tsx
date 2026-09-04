@@ -2,10 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import Reveal from "@/components/Reveal";
+import Aurora from "@/components/Aurora";
+import Torch from "@/components/Torch";
+import NavIcon from "@/components/NavIcon";
 import { useLang } from "@/i18n/LanguageProvider";
 import { useTheme } from "@/theme/ThemeProvider";
 
-// ---------------------------- DATA (não traducible: fuentes, urls, iconos) ----------------------------
+// ---------------------------- DATA (traducible: fuentes, urls, iconos) ----------------------------
 
 const STACK = [
   { src: "/tech/react.svg", label: "React" },
@@ -28,6 +31,36 @@ export default function Home() {
   const navRef = useRef<HTMLElement | null>(null);
   const [copied, setCopied] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // Keep the rail indicator in sync with the section being read.
+  useEffect(() => {
+    const links = Array.from(navRef.current?.querySelectorAll<HTMLAnchorElement>(".nav-link") ?? []);
+    const sections = links.map((link) => document.querySelector<HTMLElement>(link.hash));
+    let frame = 0;
+    const update = () => {
+      const marker = window.innerHeight * 0.35;
+      let active = "#inicio";
+      sections.forEach((section) => {
+        if (section && section.getBoundingClientRect().top <= marker) active = `#${section.id}`;
+      });
+      links.forEach((link) => {
+        const selected = link.hash === active;
+        link.classList.toggle("active", selected);
+        if (selected) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      });
+      frame = 0;
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
 
   // Hero stagger entry animation
   useEffect(() => {
@@ -54,6 +87,7 @@ export default function Home() {
   useEffect(() => {
     if (menuOpen) document.body.classList.add("menu-open");
     else document.body.classList.remove("menu-open");
+    return () => document.body.classList.remove("menu-open");
   }, [menuOpen]);
 
   // Close menu on Escape
@@ -78,21 +112,7 @@ export default function Home() {
 
   const closeMenu = () => setMenuOpen(false);
 
-  // Reusable toggle buttons for nav + mobile menu
-  const LangButton = () => (
-    <button
-      className="nav-toggle"
-      type="button"
-      onClick={toggleLang}
-      aria-label={t("nav.langToggle")}
-      title={lang === "es" ? "English" : "Español"}
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/lang-flag.png" alt="" className="flag-img" />
-    </button>
-  );
-
-  const ThemeButton = () => (
+  const themeButton = (
     <button
       className="nav-toggle"
       type="button"
@@ -112,31 +132,42 @@ export default function Home() {
 
   return (
     <>
+      <Aurora />
+      <div className="top-controls">
+        <div className="lang-switch" role="group" aria-label={t("nav.langToggle")}>
+          {(["es", "en"] as const).map((language) => (
+            <button key={language} type="button" className={`lang-btn ${lang === language ? "active" : ""}`} aria-pressed={lang === language} onClick={() => { if (lang !== language) toggleLang(); }}>
+              {language.toUpperCase()}
+            </button>
+          ))}
+        </div>
+        {themeButton}
+      </div>
       {/* ============================================================ NAV ============================================================ */}
       <header className="nav" id="nav" ref={navRef}>
         <div className="wrap nav-inner">
           <a href="#inicio" className="logo" aria-label="Inicio" onClick={closeMenu}>
-            <span>juana<span className="dotlima">.</span></span>
-            <span className="nav-tagline">{t("nav.tagline")}</span>
+            <span className="logo-mark" aria-hidden="true">j<span className="dotlima">.</span></span>
+            <span className="logo-full">juana<span className="dotlima">.</span></span>
           </a>
 
           <nav className="nav-links" aria-label="Principal">
-            <a className="nav-link" href="#inicio">{t("nav.home")}</a>
-            <a className="nav-link" href="#sobre-mi">{t("nav.about")}</a>
-            <a className="nav-link" href="#proyectos">{t("nav.projects")}</a>
-            <a className="nav-link" href="#experiencia">{t("nav.experience")}</a>
-            <a className="nav-link" href="#contacto">{t("nav.contact")}</a>
+            <a className="nav-link" href="#inicio" aria-label={t("nav.home")}><NavIcon name="home" /><span className="nav-txt">{t("nav.home")}</span></a>
+            <a className="nav-link" href="#sobre-mi" aria-label={t("nav.about")}><NavIcon name="about" /><span className="nav-txt">{t("nav.about")}</span></a>
+            <a className="nav-link" href="#proyectos" aria-label={t("nav.projects")}><NavIcon name="projects" /><span className="nav-txt">{t("nav.projects")}</span></a>
+            <a className="nav-link" href="#experiencia" aria-label={t("nav.experience")}><NavIcon name="experience" /><span className="nav-txt">{t("nav.experience")}</span></a>
+            <a className="nav-link" href="#contacto" aria-label={t("nav.contact")}><NavIcon name="contact" /><span className="nav-txt">{t("nav.contact")}</span></a>
           </nav>
 
           <div className="nav-right">
-            <LangButton />
-            <ThemeButton />
             <a
-              className="btn btn-ghost btn-sm btn-attract"
+              className="btn btn-ghost btn-sm nav-cv"
+              aria-label={t("nav.downloadCV")}
               href="/CV_Juana_Gonzalez.pdf"
               download
             >
-              {t("nav.downloadCV")}
+              <NavIcon name="download" />
+              <span className="nav-txt">{t("nav.downloadCV")}</span>
             </a>
             <button
               className="hamb"
@@ -176,10 +207,11 @@ export default function Home() {
               <span className="dot"></span>
               {t("hero.eyebrow")}
             </p>
-            <h1>
+            <Torch as="h1" className="h1-torch" radius={130}>
               Juana<br />
               <span className="lastname">González</span>
-            </h1>
+              <span className="h1-fx" aria-hidden="true">Juana<br />González</span>
+            </Torch>
             <p className="role">
               {t("hero.role")} <b>{t("hero.roleAccent")}</b>
             </p>
@@ -194,16 +226,18 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="hero-stage" aria-hidden="true">
+          <div className="hero-stage">
             <div className="phone-parallax">
               <div className="phone-float">
                 <div className="phone-enter">
-                  <figure className="photo-frame">
+                  <Torch as="figure" className="photo-frame" radius={92}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/juana-foto.png" alt={t("hero.imgAlt")} />
+                    <img className="pf-base" src="/juana-avatar.png" alt={t("hero.imgAlt")} width={330} height={440} fetchPriority="high" />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img className="pf-hover" src="/juana-avatar-dark-aligned.png" alt="" aria-hidden="true" width={330} height={440} />
                     <span className="pf-corner tl"></span>
                     <span className="pf-corner br"></span>
-                  </figure>
+                  </Torch>
                 </div>
               </div>
             </div>
@@ -312,7 +346,7 @@ export default function Home() {
       </section>
 
       {/* ============================================================ 3 · LO QUE HAGO ============================================================ */}
-      <section className="section-pad" id="lo-que-hago" style={{ background: "var(--bg-2)", borderBlock: "1px solid var(--border)" }}>
+      <section className="section-pad tinted" id="lo-que-hago">
         <div className="wrap">
           <Reveal className="section-head">
             <span className="section-kicker">{t("do.kicker")}</span>
@@ -431,7 +465,7 @@ export default function Home() {
       </section>
 
       {/* ============================================================ 5 · TRAYECTORIA ============================================================ */}
-      <section className="section-pad" id="experiencia" style={{ background: "var(--bg-2)", borderBlock: "1px solid var(--border)" }}>
+      <section className="section-pad tinted" id="experiencia">
         <div className="wrap">
           <Reveal className="section-head" style={{ alignItems: "center", textAlign: "center" }}>
             <span className="section-kicker" style={{ alignSelf: "center" }}>{t("timeline.kicker")}</span>
