@@ -396,7 +396,7 @@ export default function Home() {
           {/* 01 MoocAmbiental */}
           <article className="project">
             <Reveal className="project-media" variant="left">
-              <img className="shot" src="/projects/moocambiental.png" alt={`${t("projects.mediaAlt")} — MoocAmbiental`} loading="lazy" />
+              <Image className="shot" src="/projects/moocambiental.png" alt={`${t("projects.mediaAlt")} — MoocAmbiental`} width={1843} height={897} sizes="(max-width: 900px) 100vw, 50vw" />
             </Reveal>
             <Reveal className="project-body" variant="right">
               <span className="project-num">01</span>
@@ -424,7 +424,7 @@ export default function Home() {
           {/* 02 BMI Calculator */}
           <article className="project flip">
             <Reveal className="project-media" variant="right">
-              <img className="shot" src="/projects/bmi-calculator.png" alt={`${t("projects.mediaAlt")} — BMI Calculator`} loading="lazy" />
+              <Image className="shot" src="/projects/bmi-calculator.png" alt={`${t("projects.mediaAlt")} — BMI Calculator`} width={1795} height={897} sizes="(max-width: 900px) 100vw, 50vw" />
             </Reveal>
             <Reveal className="project-body" variant="left">
               <span className="project-num">02</span>
@@ -451,7 +451,7 @@ export default function Home() {
 {/* 03 Mily Glasses */}
 <article className="project">
   <Reveal className="project-media" variant="left">
-    <img className="shot" src="/projects/milyglasses.png" alt={`${t("projects.mediaAlt")} — Mily Glasses`} loading="lazy" />
+    <Image className="shot" src="/projects/milyglasses.png" alt={`${t("projects.mediaAlt")} — Mily Glasses`} width={1862} height={923} sizes="(max-width: 900px) 100vw, 50vw" />
   </Reveal>
   <Reveal className="project-body" variant="right">
     <span className="project-num">03</span>

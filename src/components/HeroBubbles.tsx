@@ -30,16 +30,27 @@ export default function HeroBubbles() {
     const panel = hero.querySelector<HTMLElement>(".scene-panel");
     const flow = hero.closest<HTMLElement>(".scene-flow");
     const targets = Array.from(hero.querySelectorAll<HTMLElement>(".photo-frame, .h1-torch"));
+    // Write the mask on the masked child only, so each frame restyles that layer and not the whole title/photo.
+    const maskLayers = targets.map((target) => target.querySelector<HTMLElement>(".pf-hover, .h1-fx") ?? target);
+    const lastMasks = targets.map(() => "");
     const nodes = Array.from(layer.children) as HTMLElement[];
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
     let lastTime = 0;
     let elapsed = 0;
+    let sizedFor: boolean | null = null;
+    let started = false;
     let bounds = layer.getBoundingClientRect();
 
+    const setMask = (index: number, mask: string) => {
+      if (mask === lastMasks[index]) return;
+      lastMasks[index] = mask;
+      if (mask) maskLayers[index].style.setProperty("--ambient-mask", mask);
+      else maskLayers[index].style.removeProperty("--ambient-mask");
+    };
     const clear = () => {
       layer.style.opacity = "0";
-      targets.forEach((target) => target.style.removeProperty("--ambient-mask"));
+      targets.forEach((_, index) => setMask(index, ""));
       lastTime = 0;
     };
     const isHome = () => {
@@ -69,12 +80,19 @@ export default function HeroBubbles() {
       // Read moving target positions before writing transforms and masks.
       const targetBounds = targets.map((target) => target.getBoundingClientRect());
       layer.style.opacity = "1";
+      // Size and visibility only change with the layout mode; per frame, only transforms move.
+      const resized = sizedFor !== compact;
+      sizedFor = compact;
       nodes.forEach((node, index) => {
         const bubble = positions[index];
-        node.style.display = bubble ? "block" : "none";
+        if (resized) {
+          node.style.display = bubble ? "block" : "none";
+          if (bubble) {
+            node.style.width = `${bubble.radius * 2}px`;
+            node.style.height = `${bubble.radius * 2}px`;
+          }
+        }
         if (!bubble) return;
-        node.style.width = `${bubble.radius * 2}px`;
-        node.style.height = `${bubble.radius * 2}px`;
         node.style.transform = `translate3d(${bubble.x - bubble.radius}px, ${bubble.y - bubble.radius}px, 0)`;
       });
       targets.forEach((target, index) => {
@@ -85,19 +103,30 @@ export default function HeroBubbles() {
           if (x + bubble.radius < 0 || y + bubble.radius < 0 || x - bubble.radius > rect.width || y - bubble.radius > rect.height) return [];
           return [`radial-gradient(circle ${bubble.radius}px at ${x}px ${y}px, #000 84%, transparent 100%)`];
         });
-        if (masks.length) target.style.setProperty("--ambient-mask", masks.join(","));
-        else target.style.removeProperty("--ambient-mask");
+        setMask(index, masks.join(","));
       });
       frame = requestAnimationFrame(paint);
     };
-    const wake = () => { if (!frame) frame = requestAnimationFrame(paint); };
+    const wake = () => { if (started && !frame) frame = requestAnimationFrame(paint); };
     const resize = () => { bounds = layer.getBoundingClientRect(); wake(); };
+    // Hold the loop until the page has loaded and gone idle so it never competes with the first render.
+    const hasIdle = "requestIdleCallback" in window;
+    let idle = 0;
+    const start = () => {
+      idle = hasIdle
+        ? requestIdleCallback(() => { started = true; wake(); }, { timeout: 1200 })
+        : window.setTimeout(() => { started = true; wake(); }, 200);
+    };
+    if (document.readyState === "complete") start();
+    else addEventListener("load", start, { once: true });
     addEventListener("scroll", wake, { passive: true });
     addEventListener("resize", resize);
     document.addEventListener("visibilitychange", wake);
     motion.addEventListener("change", wake);
-    wake();
     return () => {
+      removeEventListener("load", start);
+      if (hasIdle) cancelIdleCallback(idle);
+      else clearTimeout(idle);
       cancelAnimationFrame(frame);
       removeEventListener("scroll", wake);
       removeEventListener("resize", resize);
