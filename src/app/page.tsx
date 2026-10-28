@@ -26,6 +26,68 @@ const STACK = [
   { src: "/tech/git.svg", label: "Git" },
 ];
 
+type ProjectFilter = "featured" | "web" | "design" | "all";
+const PROJECT_FILTERS: ProjectFilter[] = ["featured", "web", "design", "all"];
+
+type Project = {
+  id: "mily" | "midia" | "soligem" | "mooc" | "figma" | "bmi";
+  title: string;
+  image: string;
+  width: number;
+  height: number;
+  /** Screens that must be seen whole (app view, Figma board) are letterboxed on their own background. */
+  contain?: string;
+  featured?: boolean;
+  categories: ("web" | "design")[];
+  stack: string[];
+  links: { label: "viewSite" | "viewDemo" | "viewCode" | "viewManual" | "viewFigma"; href: string }[];
+};
+
+const PROJECTS: Project[] = [
+  {
+    id: "mily", title: "Mily Glasses Vision", image: "/projects/milyglasses.webp", width: 1700, height: 873, contain: "#f8f4ee",
+    featured: true, categories: ["web", "design"],
+    stack: ["WordPress", "WooCommerce", "Blocksy", "PHP", "JavaScript", "CSS"],
+    links: [{ label: "viewSite", href: "https://milyglasses.com" }],
+  },
+  {
+    id: "midia", title: "Mi día", image: "/projects/mi-dia.webp", width: 894, height: 880, contain: "#0a0a0f",
+    featured: true, categories: ["web"],
+    stack: ["Next.js", "TypeScript", "Supabase", "PWA", "Web Push", "Vercel"],
+    links: [],
+  },
+  {
+    id: "soligem", title: "Soligem — Manual de marca", image: "/projects/soligem.webp", width: 1235, height: 693, contain: "#ffffff",
+    featured: true, categories: ["design"],
+    stack: ["Illustrator", "Branding", "Identidad visual"],
+    links: [{ label: "viewManual", href: "https://drive.google.com/file/d/1z1pez7w9TSNhc4qaAEKkHHGn2dx_gOd_/view?usp=sharing" }],
+  },
+  {
+    id: "mooc", title: "MoocAmbiental", image: "/projects/moocambiental.png", width: 1843, height: 897,
+    featured: true, categories: ["web"],
+    stack: ["Next.js", "TypeScript", "Express", "MySQL", "JWT"],
+    links: [
+      { label: "viewDemo", href: "https://mooc-ambiental.vercel.app" },
+      { label: "viewCode", href: "https://github.com/JuanaGonzalez21/mooc-ambiental-frontend" },
+    ],
+  },
+  {
+    id: "figma", title: "Figma Community", image: "/projects/figma.webp", width: 830, height: 340, contain: "#ffffff",
+    categories: ["design"],
+    stack: ["Figma", "UI Design", "Design System", "Prototipado"],
+    links: [{ label: "viewFigma", href: "https://www.figma.com/@juanagonzalez1" }],
+  },
+  {
+    id: "bmi", title: "BMI Calculator", image: "/projects/bmi-calculator.png", width: 1795, height: 897,
+    categories: ["web"],
+    stack: ["React", "Vite", "JavaScript", "CSS3"],
+    links: [
+      { label: "viewDemo", href: "https://bmi-calculator-one-mocha.vercel.app" },
+      { label: "viewCode", href: "https://github.com/JuanaGonzalez21/BodyMass.github.io" },
+    ],
+  },
+];
+
 // ---------------------------- MAIN ----------------------------
 
 export default function Home() {
@@ -35,6 +97,10 @@ export default function Home() {
   const navRef = useRef<HTMLElement | null>(null);
   const [copied, setCopied] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [projectFilter, setProjectFilter] = useState<ProjectFilter>("featured");
+  const shownProjects = PROJECTS.filter((project) =>
+    projectFilter === "all" || (projectFilter === "featured" ? project.featured : project.categories.includes(projectFilter)),
+  );
 
   // Keep the rail indicator in sync with the section being read.
   useEffect(() => {
@@ -393,85 +459,51 @@ export default function Home() {
             <h2 className="section-title">{t("projects.title")}</h2>
           </Reveal>
 
-          {/* 01 MoocAmbiental */}
-          <article className="project">
-            <Reveal className="project-media" variant="left">
-              <Image className="shot" src="/projects/moocambiental.png" alt={`${t("projects.mediaAlt")} — MoocAmbiental`} width={1843} height={897} sizes="(max-width: 900px) 100vw, 50vw" />
-            </Reveal>
-            <Reveal className="project-body" variant="right">
-              <span className="project-num">01</span>
-              <h3>MoocAmbiental</h3>
-              <p className="desc">{t("projects.1.desc")}</p>
-              <p className="role-line"><span className="lbl">{t("projects.role")}</span> {t("projects.1.role")}</p>
-              <div className="stack">
-                <span className="badge">Next.js</span>
-                <span className="badge">TypeScript</span>
-                <span className="badge">Express</span>
-                <span className="badge">MySQL</span>
-                <span className="badge">JWT</span>
-              </div>
-              <div className="links">
-                <a className="btn btn-primary btn-sm" href="https://mooc-ambiental.vercel.app" target="_blank" rel="noopener noreferrer">
-                  {t("projects.viewDemo")} <span className="arr">→</span>
-                </a>
-                <a className="btn btn-ghost btn-sm" href="https://github.com/JuanaGonzalez21/mooc-ambiental-frontend" target="_blank" rel="noopener noreferrer">
-                  {t("projects.viewCode")} <span className="arr">→</span>
-                </a>
-              </div>
-            </Reveal>
-          </article>
+          <div className="project-filters" role="group" aria-label={t("projects.filterLabel")}>
+            {PROJECT_FILTERS.map((filter) => (
+              <button key={filter} type="button" className="project-filter" aria-pressed={projectFilter === filter} onClick={() => setProjectFilter(filter)}>
+                {t(`projects.filter.${filter}` as const)}
+              </button>
+            ))}
+          </div>
 
-          {/* 02 BMI Calculator */}
-          <article className="project flip">
-            <Reveal className="project-media" variant="right">
-              <Image className="shot" src="/projects/bmi-calculator.png" alt={`${t("projects.mediaAlt")} — BMI Calculator`} width={1795} height={897} sizes="(max-width: 900px) 100vw, 50vw" />
-            </Reveal>
-            <Reveal className="project-body" variant="left">
-              <span className="project-num">02</span>
-              <h3>BMI Calculator</h3>
-              <p className="desc">{t("projects.2.desc")}</p>
-              <p className="role-line"><span className="lbl">{t("projects.role")}</span> {t("projects.2.role")}</p>
-              <div className="stack">
-                <span className="badge">React</span>
-                <span className="badge">Vite</span>
-                <span className="badge">JavaScript</span>
-                <span className="badge">CSS3</span>
-              </div>
-              <div className="links">
-                <a className="btn btn-primary btn-sm" href="https://bmi-calculator-one-mocha.vercel.app" target="_blank" rel="noopener noreferrer">
-                  {t("projects.viewDemo")} <span className="arr">→</span>
-                </a>
-                <a className="btn btn-ghost btn-sm" href="https://github.com/JuanaGonzalez21/BodyMass.github.io" target="_blank" rel="noopener noreferrer">
-                  {t("projects.viewCode")} <span className="arr">→</span>
-                </a>
-              </div>
-            </Reveal>
-          </article>
-
-{/* 03 Mily Glasses */}
-<article className="project">
-  <Reveal className="project-media" variant="left">
-    <Image className="shot" src="/projects/milyglasses.png" alt={`${t("projects.mediaAlt")} — Mily Glasses`} width={1862} height={923} sizes="(max-width: 900px) 100vw, 50vw" />
-  </Reveal>
-  <Reveal className="project-body" variant="right">
-    <span className="project-num">03</span>
-    <h3>Mily Glasses Vision</h3>
-    <p className="desc">{t("projects.3.desc")}</p>
-    <p className="role-line"><span className="lbl">{t("projects.role")}</span> {t("projects.3.role")}</p>
-    <div className="stack">
-      <span className="badge">WordPress</span>
-      <span className="badge">WooCommerce</span>
-      <span className="badge">Blocksy</span>
-      <span className="badge">Bold</span>
-      <span className="badge">CSS</span>
-    </div>
-    <div className="links">
-      <a className="btn btn-primary btn-sm" href="https://milyglasses.com" target="_blank" rel="noopener noreferrer">
-        {t("projects.viewDemo")} <span className="arr">→</span>
-      </a>
-    </div>
-  </Reveal>
-</article>
+          {/* Every project stays mounted (filtered ones are hidden) so SceneFlow keeps animating the same elements. */}
+          {PROJECTS.map((project, index) => {
+            const order = shownProjects.indexOf(project);
+            return (
+              <article key={project.id} className={`project${order % 2 === 1 ? " flip" : ""}`} hidden={order < 0}>
+                <Reveal className="project-media" variant={index % 2 ? "right" : "left"}>
+                  <Image
+                    className={`shot${project.contain ? " shot-contain" : ""}`}
+                    style={project.contain ? { background: project.contain } : undefined}
+                    src={project.image}
+                    alt={`${t("projects.mediaAlt")} — ${project.title}`}
+                    width={project.width}
+                    height={project.height}
+                    sizes="(max-width: 900px) 100vw, 50vw"
+                  />
+                </Reveal>
+                <Reveal className="project-body" variant={index % 2 ? "left" : "right"}>
+                  <span className="project-num">{String(order + 1).padStart(2, "0")}</span>
+                  <h3>{project.title}</h3>
+                  <p className="desc">{t(`projects.${project.id}.desc` as const)}</p>
+                  <p className="role-line"><span className="lbl">{t("projects.role")}</span> {t(`projects.${project.id}.role` as const)}</p>
+                  <div className="stack">
+                    {project.stack.map((item) => <span className="badge" key={item}>{item}</span>)}
+                  </div>
+                  {project.links.length > 0 && (
+                    <div className="links">
+                      {project.links.map((link, linkIndex) => (
+                        <a key={link.href} className={`btn ${linkIndex === 0 ? "btn-primary" : "btn-ghost"} btn-sm`} href={link.href} target="_blank" rel="noopener noreferrer">
+                          {t(`projects.${link.label}` as const)} <span className="arr">→</span>
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </Reveal>
+              </article>
+            );
+          })}
         </div>
       </ScrollScene>
 

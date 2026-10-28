@@ -433,6 +433,20 @@ section { position: relative; }
 .project .role-line .lbl { font-family: var(--font-mono); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-ink); }
 .project .stack { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
 .project .links { display: flex; flex-wrap: wrap; gap: 12px; }
+.project[hidden] { display: none; }
+.project-media .shot-contain { object-fit: contain; }
+
+/* category filters */
+.project-filters { display: flex; flex-wrap: wrap; gap: 10px; margin: calc(clamp(40px, 6vw, 72px) * -0.5) 0 clamp(40px, 6vw, 72px); }
+.project-filter {
+  font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.04em;
+  padding: 0.6em 1.1em; border-radius: 999px; cursor: pointer;
+  background: transparent; color: var(--muted); border: 1px solid var(--border);
+  transition: color .2s, border-color .2s, background .2s;
+}
+.project-filter:hover { color: var(--text); border-color: var(--accent); }
+.project-filter[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 600; }
+.project-filter:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 /* ============================================================
    5 — TIMELINE
