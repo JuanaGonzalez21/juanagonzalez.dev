@@ -7,7 +7,6 @@ import Aurora from "@/components/Aurora";
 import HeroBubbles from "@/components/HeroBubbles";
 import Torch from "@/components/Torch";
 import NavIcon from "@/components/NavIcon";
-import SceneFlow from "@/components/SceneFlow";
 import ScrollScene from "@/components/ScrollScene";
 import { useLang } from "@/i18n/LanguageProvider";
 import { useTheme } from "@/theme/ThemeProvider";
@@ -108,7 +107,6 @@ export default function Home() {
     const sections = links.map((link) => document.querySelector<HTMLElement>(link.hash));
     let frame = 0;
     const update = () => {
-      if (document.querySelector(".scene-flow[data-enhanced]")) return;
       const marker = window.innerHeight * 0.35;
       let active = "#inicio";
       sections.forEach((section) => {
@@ -271,7 +269,7 @@ export default function Home() {
       </div>
 
       {/* ============================================================ 1 · HERO ============================================================ */}
-      <SceneFlow>
+      <main className="scene-flow">
       <ScrollScene className="hero" id="inicio" ref={heroRef}>
         <div className="hero-grid-bg" aria-hidden="true"></div>
         <div className="wrap hero-layout">
@@ -467,7 +465,7 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Every project stays mounted (filtered ones are hidden) so SceneFlow keeps animating the same elements. */}
+          {/* Every project stays mounted (filtered ones are hidden) so each Reveal keeps its revealed state. */}
           {PROJECTS.map((project, index) => {
             const order = shownProjects.indexOf(project);
             return (
@@ -610,7 +608,7 @@ export default function Home() {
         </div>
       </ScrollScene>
 
-      </SceneFlow>
+      </main>
 
       {/* ============================================================ FOOTER ============================================================ */}
       <footer className="footer">

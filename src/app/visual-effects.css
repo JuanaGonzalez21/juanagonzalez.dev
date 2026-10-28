@@ -268,7 +268,7 @@ section[id] { scroll-margin-top: 80px; }
   mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my), #000 78%, transparent 100%), var(--ambient-mask, linear-gradient(transparent, transparent));
   pointer-events: none;
 }
-/* Floating reveal lenses are confined to the home scene by HeroBubbles. */
+/* Floating reveal lenses are clipped to the hero by HeroBubbles. */
 .hero-bubbles {
   position: fixed;
   inset: 0;

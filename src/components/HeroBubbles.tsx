@@ -27,8 +27,6 @@ export default function HeroBubbles() {
     const layer = layerRef.current;
     const hero = document.getElementById("inicio");
     if (!layer || !hero) return;
-    const panel = hero.querySelector<HTMLElement>(".scene-panel");
-    const flow = hero.closest<HTMLElement>(".scene-flow");
     const targets = Array.from(hero.querySelectorAll<HTMLElement>(".photo-frame, .h1-torch"));
     // Write the mask on the masked child only, so each frame restyles that layer and not the whole title/photo.
     const maskLayers = targets.map((target) => target.querySelector<HTMLElement>(".pf-hover, .h1-fx") ?? target);
@@ -53,10 +51,17 @@ export default function HeroBubbles() {
       targets.forEach((_, index) => setMask(index, ""));
       lastTime = 0;
     };
+    let clipBottom = -1;
+    // The layer is fixed to the viewport; clip it to the hero so bubbles scroll away with it.
     const isHome = () => {
-      if (flow?.dataset.enhanced && panel) return panel.style.visibility === "visible" && !panel.inert;
       const rect = hero.getBoundingClientRect();
-      return rect.top < innerHeight * .5 && rect.bottom > innerHeight * .5;
+      if (rect.bottom <= 0 || rect.top >= innerHeight) return false;
+      const bottom = Math.max(0, Math.round(innerHeight - rect.bottom));
+      if (bottom !== clipBottom) {
+        clipBottom = bottom;
+        layer.style.clipPath = `inset(0 0 ${bottom}px 0)`;
+      }
+      return true;
     };
 
     const paint = (now: number) => {
