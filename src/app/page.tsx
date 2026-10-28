@@ -381,14 +381,7 @@ export default function Home() {
                 {t("about.p2.post")}
               </Reveal>
               <Reveal as="p">{t("about.p3")}</Reveal>
-              <Reveal as="p">
-                {t("about.p4.pre")}
-                <a className="ig-link" href="https://instagram.com/progamacion" target="_blank" rel="noopener noreferrer">
-                  @progamacion
-                </a>
-                {t("about.p4.post")}
-              </Reveal>
-              <Reveal as="p">{t("about.p5")}</Reveal>
+              <Reveal as="p">{t("about.p4")}</Reveal>
               <Reveal as="p" className="pd">{t("about.pd")} 🐛</Reveal>
             </div>
 
